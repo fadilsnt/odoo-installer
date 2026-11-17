@@ -1,11 +1,12 @@
 # Odoo Installation Guide for Ubuntu 24.04
 
-This repository contains automated installation scripts for deploying Odoo on Ubuntu 24.04 LTS. It includes dedicated installation files for both Odoo 18 and Odoo 19, allowing you to set up a clean and production-ready Odoo environment with minimal manual configuration.
+This repository contains automated installation scripts for deploying Odoo on Ubuntu 24.04 LTS. It includes dedicated installation files for Odoo 18, Odoo 19, and Odoo 20, allowing you to set up a clean and production-ready Odoo environment with minimal manual configuration.
 
 The project currently includes the following scripts:
 
 - `odoo18_install_script.sh` — installation script for Odoo 18
 - `odoo19_install_script.sh` — installation script for Odoo 19
+- `odoo20_install_script.sh` — installation script for Odoo 20
 
 Each script is created as a separate standalone installer and can be used independently without modifying the other.
 
@@ -95,6 +96,13 @@ wget https://raw.githubusercontent.com/fadilsnt/odoo-installer/main/odoo19_insta
 curl -O https://raw.githubusercontent.com/fadilsnt/odoo-installer/main/odoo19_install_script.sh
 ```
 
+```bash
+# Odoo 20
+wget https://raw.githubusercontent.com/fadilsnt/odoo-installer/main/odoo20_install_script.sh
+# or
+curl -O https://raw.githubusercontent.com/fadilsnt/odoo-installer/main/odoo20_install_script.sh
+```
+
 ### Step 2: Review and Customize (Optional)
 
 Open the script to customize installation parameters:
@@ -109,6 +117,12 @@ or
 nano odoo19_install_script.sh
 ```
 
+or
+
+```bash
+nano odoo20_install_script.sh
+```
+
 ### Step 3: Make the Script Executable
 
 ```bash
@@ -119,6 +133,12 @@ or
 
 ```bash
 chmod +x odoo19_install_script.sh
+```
+
+or
+
+```bash
+chmod +x odoo20_install_script.sh
 ```
 
 ### Step 4: Run the Installation Script
@@ -133,25 +153,31 @@ or
 sudo ./odoo19_install_script.sh
 ```
 
+or
+
+```bash
+sudo ./odoo20_install_script.sh
+```
+
 The installation will take a few minutes. When completed, you'll see a summary of your installation details.
 
 ## Configuration Options
 
 You can customize the installation by modifying the variables at the top of the script:
 
-| Parameter                  | Description                      | Default Value                 |
-| -------------------------- | -------------------------------- | ----------------------------- |
-| `OE_USER`                  | System user for Odoo             | `odoo18` / `odoo19`           |
-| `OE_HOME`                  | Installation directory           | `/opt/odoo18` / `/opt/odoo19` |
-| `OE_PORT`                  | Main HTTP port                   | `8069`                        |
-| `OE_VERSION`               | Odoo version                     | `18.0` / `19.0`               |
-| `INSTALL_WKHTMLTOPDF`      | Install wkhtmltopdf              | `True`                        |
-| `GENERATE_RANDOM_PASSWORD` | Generate random admin password   | `True`                        |
-| `INSTALL_NGINX`            | Install and configure Nginx      | `True`                        |
-| `WEBSITE_NAME`             | Domain name for Nginx            | `_`                           |
-| `ENABLE_SSL`               | Configure SSL with Let's Encrypt | `False`                       |
-| `IS_ENTERPRISE`            | Install Enterprise Edition       | `False`                       |
-| `CREATE_VIRTUAL_ENV`       | Use Python virtual environment   | `True`                        |
+| Parameter                  | Description                      | Default Value                           |
+| -------------------------- | -------------------------------- | --------------------------------------- |
+| `OE_USER`                  | System user for Odoo             | `odoo18` / `odoo19` / `odoo20`          |
+| `OE_HOME`                  | Installation directory           | `/opt/odoo18` / `/opt/odoo19` / `/opt/odoo20` |
+| `OE_PORT`                  | Main HTTP port                   | `8069`                                  |
+| `OE_VERSION`               | Odoo version                     | `18.0` / `19.0` / `20.0`                |
+| `INSTALL_WKHTMLTOPDF`      | Install wkhtmltopdf              | `True`                                  |
+| `GENERATE_RANDOM_PASSWORD` | Generate random admin password   | `True`                                  |
+| `INSTALL_NGINX`            | Install and configure Nginx      | `True`                                  |
+| `WEBSITE_NAME`             | Domain name for Nginx            | `_`                                     |
+| `ENABLE_SSL`               | Configure SSL with Let's Encrypt | `False`                                 |
+| `IS_ENTERPRISE`            | Install Enterprise Edition       | `False`                                 |
+| `CREATE_VIRTUAL_ENV`       | Use Python virtual environment   | `True`                                  |
 
 ## Enterprise Edition
 
@@ -223,6 +249,25 @@ sudo systemctl status odoo19-server
 sudo tail -f /var/log/odoo19/odoo19-server.log
 ```
 
+For Odoo 20:
+
+```bash
+# Start Odoo
+sudo systemctl start odoo20-server
+
+# Stop Odoo
+sudo systemctl stop odoo20-server
+
+# Restart Odoo
+sudo systemctl restart odoo20-server
+
+# Check Status
+sudo systemctl status odoo20-server
+
+# View Logs
+sudo tail -f /var/log/odoo20/odoo20-server.log
+```
+
 ## Troubleshooting
 
 ### Common Issues
@@ -238,6 +283,7 @@ sudo tail -f /var/log/odoo19/odoo19-server.log
 3. **Permission issues**
    - Run: `sudo chown -R odoo18:odoo18 /opt/odoo18` for Odoo 18
    - Run: `sudo chown -R odoo19:odoo19 /opt/odoo19` for Odoo 19
+   - Run: `sudo chown -R odoo20:odoo20 /opt/odoo20` for Odoo 20
    - Check log file permissions for the corresponding user
 
 4. **Nginx configuration issues**
@@ -262,6 +308,12 @@ For minor version upgrades:
    sudo systemctl stop odoo19-server
    ```
 
+   or
+
+   ```bash
+   sudo systemctl stop odoo20-server
+   ```
+
 2. Update the Odoo source code:
 
    ```bash
@@ -272,6 +324,12 @@ For minor version upgrades:
 
    ```bash
    sudo su - odoo19 -c "cd /opt/odoo19/odoo && git pull"
+   ```
+
+   or
+
+   ```bash
+   sudo su - odoo20 -c "cd /opt/odoo20/odoo && git pull"
    ```
 
 3. Update dependencies:
@@ -286,6 +344,12 @@ For minor version upgrades:
    sudo su - odoo19 -c "/opt/odoo19/venv/bin/pip install -r /opt/odoo19/odoo/requirements.txt"
    ```
 
+   or
+
+   ```bash
+   sudo su - odoo20 -c "/opt/odoo20/venv/bin/pip install -r /opt/odoo20/odoo/requirements.txt"
+   ```
+
 4. Restart the service:
 
    ```bash
@@ -296,6 +360,12 @@ For minor version upgrades:
 
    ```bash
    sudo systemctl start odoo19-server
+   ```
+
+   or
+
+   ```bash
+   sudo systemctl start odoo20-server
    ```
 
 ## Security Recommendations
@@ -333,5 +403,6 @@ For additional help, visit the official Odoo documentation:
 
 - [Odoo 18 Documentation](https://www.odoo.com/documentation/18.0/)
 - [Odoo 19 Documentation](https://www.odoo.com/documentation/19.0/)
+- [Odoo 20 Documentation](https://www.odoo.com/documentation/20.0/)
 
 You can also submit an issue on the project repository for support or improvements.
